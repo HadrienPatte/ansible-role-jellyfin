@@ -1,0 +1,20 @@
+---
+galaxy_info:
+  role_name: jellyfin
+  author: Hadrien Patte
+  company: ""
+  description: Install Jellyfin on Debian.
+  license: MIT
+  min_ansible_version: 2.4
+  platforms:
+    - name: Debian
+      versions:
+        - jessie
+        - stretch
+        - buster
+  galaxy_tags:
+    - jellyfin
+    - media
+
+dependencies: []
+...
