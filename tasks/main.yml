@@ -3,11 +3,17 @@
   apt:
     name: apt-transport-https
     state: present
+  register: apt_result
+  retries: 3
+  until: apt_result is succeeded
 
 - name: Import Jellyfin Team GPG key
   apt_key:
     url: https://repo.jellyfin.org/debian/jellyfin_team.gpg.key
     state: present
+  register: apt_key_result
+  retries: 3
+  until: apt_key_result is succeeded
 
 - name: Add Jellyfin repository
   apt_repository:
