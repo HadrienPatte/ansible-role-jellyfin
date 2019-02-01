@@ -1,0 +1,22 @@
+---
+services: docker
+
+language: python
+python:
+  - 3.6
+cache: pip
+
+install:
+  - pip install molecule docker
+
+before_script:
+  - cd ..
+  - mv ansible-role-jellyfin hadrienpatte.jellyfin
+  - cd hadrienpatte.jellyfin
+
+script:
+  - molecule test
+
+notifications:
+  webhooks: https://galaxy.ansible.com/api/v1/notifications/
+...
