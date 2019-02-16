@@ -30,4 +30,10 @@
   register: apt_result
   retries: 3
   until: apt_result is succeeded
+
+- name: Enable Jellyfin
+  systemd:
+    name: jellyfin
+    state: started
+    enabled: true
 ...
