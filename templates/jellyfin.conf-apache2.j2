@@ -1,0 +1,8 @@
+<VirtualHost *:80>
+	ServerName {{ jellyfin_FQDN }}
+
+  ProxyPreserveHost On
+  ProxyPass / http://localhost:{{ jellyfin_HTTP_port }}/
+  ProxyPassReverse / http://localhost:{{ jellyfin_HTTP_port }}/
+
+</VirtualHost>

@@ -2,8 +2,8 @@
 - name: Install Jellyfin
   include_tasks: install.yml
 
-- name: Configure Nginx
-  include_tasks: nginx.yml
+- name: Configure {{ jellyfin_HTTP_server }}
+  include_tasks: HTTP_server.yml
 
 - name: Configure Jellyfin
   include_tasks: configure.yml

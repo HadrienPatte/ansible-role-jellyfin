@@ -13,7 +13,8 @@ None.
 * `jellyfin_HTTP_port`: HTTP port Jellyfin should bind to, defaults too `8096`
 * `jellyfin_HTTPS_port`: HTTPS port Jellyfin should bind to, defaults to `8920`
 * `jellyfin_FQDN`: Fully Qualified Domain Name of the server
-* `jellyfin_HTTP_server`: HTTP reverse proxy server, defaults to `nginx`
+* `jellyfin_HTTP_server`: HTTP reverse proxy server, possible values are
+  `apache2` and `nginx`, defaults to `nginx`
 
 # Dependencies
 

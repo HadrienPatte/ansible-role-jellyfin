@@ -1,0 +1,41 @@
+---
+- name: Enable apache2 proxy modules
+  apache2_module:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - proxy
+    - proxy_ajp
+    - proxy_http
+    - rewrite
+    - deflate
+    - headers
+    - proxy_balancer
+    - proxy_connect
+    - proxy_html
+  when: jellyfin_HTTP_server == "apache2"
+  notify: Restart {{ jellyfin_HTTP_server }}
+
+- name: Remove default {{ jellyfin_HTTP_server }} site
+  file:
+    path: /etc/{{ jellyfin_HTTP_server }}/sites-enabled/{{ item }}
+    state: absent
+  loop:
+    - default
+    - 000-default.conf
+    - default-ssl.conf
+  notify: Restart {{ jellyfin_HTTP_server }}
+
+- name: Copy {{ jellyfin_HTTP_server }} configuration
+  template:
+    src: jellyfin.conf-{{ jellyfin_HTTP_server }}.j2
+    dest: /etc/{{ jellyfin_HTTP_server }}/sites-available/jellyfin.conf
+  notify: Restart {{ jellyfin_HTTP_server }}
+
+- name: Enable Jellyfin site
+  file:
+    src: /etc/{{ jellyfin_HTTP_server }}/sites-available/jellyfin.conf
+    dest: /etc/{{ jellyfin_HTTP_server }}/sites-enabled/jellyfin.conf
+    state: link
+  notify: Restart {{ jellyfin_HTTP_server }}
+...
