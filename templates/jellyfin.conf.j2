@@ -1,0 +1,12 @@
+server {
+	listen 80 default_server;
+	listen [::]:80 default_server;
+
+	server_name {{ jellyfin_FQDN }};
+
+  location / {
+    proxy_pass http://localhost:{{ jellyfin_HTTP_port }}/;
+    proxy_buffering off;
+    proxy_set_header X-Real-IP $remote_addr;
+  }
+}

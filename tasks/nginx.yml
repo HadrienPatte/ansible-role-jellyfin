@@ -1,0 +1,20 @@
+---
+- name: Remove default Nginx site
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+  notify: Restart Nginx
+
+- name: Copy Nginx configuration
+  template:
+    src: jellyfin.conf.j2
+    dest: /etc/nginx/sites-available/jellyfin.conf
+  notify: Restart Nginx
+
+- name: Enable Jellyfin site
+  file:
+    src: /etc/nginx/sites-available/jellyfin.conf
+    dest: /etc/nginx/sites-enabled/jellyfin.conf
+    state: link
+  notify: Restart Nginx
+...

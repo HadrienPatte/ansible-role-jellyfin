@@ -1,39 +1,10 @@
 ---
-- name: Install apt-transport-https
-  apt:
-    name: apt-transport-https
-    state: present
-  register: apt_result
-  retries: 3
-  until: apt_result is succeeded
-
-- name: Import Jellyfin Team GPG key
-  apt_key:
-    url: https://repo.jellyfin.org/debian/jellyfin_team.gpg.key
-    state: present
-  register: apt_key_result
-  retries: 3
-  until: apt_key_result is succeeded
-
-- name: Add Jellyfin repository
-  apt_repository:
-    repo: >
-      deb https://repo.jellyfin.org/debian {{ ansible_distribution_release }}
-      main
-    state: present
-
 - name: Install Jellyfin
-  apt:
-    update_cache: true
-    name: jellyfin
-    state: present
-  register: apt_result
-  retries: 3
-  until: apt_result is succeeded
+  include_tasks: install.yml
 
-- name: Enable Jellyfin
-  systemd:
-    name: jellyfin
-    state: started
-    enabled: true
+- name: Configure Nginx
+  include_tasks: nginx.yml
+
+- name: Configure Jellyfin
+  include_tasks: configure.yml
 ...
