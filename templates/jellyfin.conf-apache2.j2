@@ -1,8 +1,32 @@
 <VirtualHost *:80>
 	ServerName {{ jellyfin_FQDN }}
 
-  ProxyPreserveHost On
-  ProxyPass / http://localhost:{{ jellyfin_HTTP_port }}/
-  ProxyPassReverse / http://localhost:{{ jellyfin_HTTP_port }}/
+	ProxyPreserveHost On
+
+	ProxyPass /embywebsocket ws://localhost:{{ jellyfin_HTTP_port }}/embywebsocket
+	ProxyPassReverse /embywebsocket ws://localhost:{{ jellyfin_HTTP_port }}/embywebsocket
+
+	ProxyPass / http://localhost:{{ jellyfin_HTTP_port }}/
+	ProxyPassReverse / http://localhost:{{ jellyfin_HTTP_port }}/
 
 </VirtualHost>
+
+<IfModule mod_ssl.c>
+	<VirtualHost *:443>
+    ServerName {{ jellyfin_FQDN }}
+
+		SSLEngine on
+		SSLCertificateFile {{ jellyfin_certificate_path }}/fullchain.pem
+	  SSLCertificateKeyFile {{ jellyfin_certificate_path }}/privkey.pem
+    Protocols h2 http/1.1
+
+    ProxyPreserveHost On
+
+    ProxyPass /embywebsocket ws://localhost:{{ jellyfin_HTTP_port }}/embywebsocket
+    ProxyPassReverse /embywebsocket ws://localhost:{{ jellyfin_HTTP_port }}/embywebsocket
+
+    ProxyPass / http://localhost:{{ jellyfin_HTTP_port }}/
+    ProxyPassReverse / http://localhost:{{ jellyfin_HTTP_port }}/
+
+	</VirtualHost>
+</IfModule>

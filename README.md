@@ -15,10 +15,11 @@ None.
 * `jellyfin_FQDN`: Fully Qualified Domain Name of the server
 * `jellyfin_HTTP_server`: HTTP reverse proxy server, possible values are
   `apache2` and `nginx`, defaults to `nginx`
+* `jellyfin_certificate_path`: directory where the TSL/SSL certificate will be
 
 # Dependencies
 
-None.
+* [hadrienpatte.self_signed_certificate](https://galaxy.ansible.com/hadrienpatte/self_signed_certificate)
 
 # Example Playbook
 
