@@ -33,3 +33,13 @@ def test_service_is_running(host, name):
 def test_service_is_enabled(host, name):
     service = host.service(name)
     assert service.is_enabled
+
+
+@pytest.mark.parametrize('port', [
+    ('8096'),
+    ('8920'),
+    ('80'),
+    ('443'),
+])
+def test_socket(host, port):
+    assert host.socket('tcp://0.0.0.0:' + port).is_listening
