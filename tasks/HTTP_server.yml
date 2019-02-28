@@ -25,6 +25,7 @@
     - default
     - 000-default.conf
     - default-ssl.conf
+  when: jellyfin_remove_default
   notify: Restart {{ jellyfin_HTTP_server }}
 
 - name: Copy {{ jellyfin_HTTP_server }} configuration

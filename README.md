@@ -16,6 +16,8 @@ None.
 * `jellyfin_HTTP_server`: HTTP reverse proxy server, possible values are
   `apache2` and `nginx`, defaults to `nginx`
 * `jellyfin_certificate_path`: directory where the TSL/SSL certificate will be
+* `jellyfin_remove_default`: set this to `true` to remove apache2/nginx default
+  site
 
 # Dependencies
 
