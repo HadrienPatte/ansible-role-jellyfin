@@ -13,6 +13,7 @@
     - proxy_balancer
     - proxy_connect
     - proxy_html
+    - ssl
   when: jellyfin_HTTP_server == "apache2"
   notify: Restart {{ jellyfin_HTTP_server }}
 
@@ -24,6 +25,7 @@
     - default
     - 000-default.conf
     - default-ssl.conf
+  when: jellyfin_remove_default
   notify: Restart {{ jellyfin_HTTP_server }}
 
 - name: Copy {{ jellyfin_HTTP_server }} configuration

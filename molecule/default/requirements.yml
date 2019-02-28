@@ -1,0 +1,4 @@
+---
+- src: hadrienpatte.self_signed_certificate
+  version: 1.0.0
+...

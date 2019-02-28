@@ -5,8 +5,6 @@ driver:
   name: docker
 lint:
   name: yamllint
-  options:
-    config-file: molecule/default/yamllint.yml
 platforms:
   - name: instance
     image: minimum2scp/systemd-stretch

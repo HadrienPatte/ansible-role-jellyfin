@@ -3,4 +3,6 @@ jellyfin_HTTP_port: 8096
 jellyfin_HTTPS_port: 8920
 jellyfin_FQDN: jellyfin.example.com
 jellyfin_HTTP_server: nginx
+jellyfin_certificate_path: /etc/ssl/private/{{ jellyfin_FQDN }}
+jellyfin_remove_default: false
 ...
