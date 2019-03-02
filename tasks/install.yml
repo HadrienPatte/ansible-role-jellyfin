@@ -33,7 +33,7 @@
   retries: 3
   until: apt_result is succeeded
 
-- name: Enable Jellyfin and {{ jellyfin_HTTP_server}}
+- name: Enable Jellyfin and {{ jellyfin_HTTP_server }}
   systemd:
     name: "{{ item }}"
     state: started
