@@ -12,6 +12,12 @@ galaxy_info:
         - jessie
         - stretch
         - buster
+    - name: Ubuntu
+      versions:
+        - trusty
+        - xenial
+        - bionic
+        - cosmic
   galaxy_tags:
     - jellyfin
     - media

@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.com/HadrienPatte/ansible-role-jellyfin.svg?branch=master)](https://travis-ci.com/HadrienPatte/ansible-role-jellyfin)
 
-An Ansible Role that installs [Jellyfin](https://github.com/jellyfin/jellyfin) on Debian.
+An Ansible Role that installs [Jellyfin](https://github.com/jellyfin/jellyfin) on Debian and Ubuntu.
 
 ## Requirements
 
