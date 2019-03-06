@@ -1,6 +1,9 @@
 <VirtualHost *:80>
   ServerName {{ jellyfin_FQDN }}
 
+{% if jellyfin_redirect_HTTPS %}
+  Redirect permanent / https://{{ jellyfin_FQDN }}
+{% else %}
   ProxyPreserveHost On
 
   ProxyPass /embywebsocket ws://localhost:{{ jellyfin_HTTP_port }}/embywebsocket
@@ -8,6 +11,7 @@
 
   ProxyPass / http://localhost:{{ jellyfin_HTTP_port }}/
   ProxyPassReverse / http://localhost:{{ jellyfin_HTTP_port }}/
+{% endif %}
 
 </VirtualHost>
 

@@ -6,4 +6,5 @@ jellyfin_HTTP_server: nginx
 jellyfin_certificate_path: /etc/ssl/private/{{ jellyfin_FQDN }}
 jellyfin_generate_self_signed_certificate: true
 jellyfin_remove_default: false
+jellyfin_redirect_HTTPS: false
 ...
