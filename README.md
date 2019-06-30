@@ -12,7 +12,7 @@ None.
 
 * `jellyfin_HTTP_port`: HTTP port Jellyfin should bind to, defaults to `8096`
 * `jellyfin_HTTPS_port`: HTTPS port Jellyfin should bind to, defaults to `8920`
-* `jellyfin_FQDN`: Fully Qualified Domain Name of the server
+* `jellyfin_FQDN`: List of Fully Qualified Domain Names of the server
 * `jellyfin_HTTP_server`: HTTP reverse proxy server, possible values are
   `apache2` and `nginx`, defaults to `nginx`
 * `jellyfin_certificate_path`: directory where the TSL/SSL certificate will be
