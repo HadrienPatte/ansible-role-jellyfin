@@ -10,6 +10,7 @@
     self_signed_certificate_key_path: "{{ jellyfin_certificate_path }}"
     self_signed_certificate_path: "{{ jellyfin_certificate_path }}"
   when: jellyfin_generate_self_signed_certificate
+  notify: Restart {{ jellyfin_HTTP_server }}
 
 - name: Configure {{ jellyfin_HTTP_server }}
   include_tasks: HTTP_server.yml

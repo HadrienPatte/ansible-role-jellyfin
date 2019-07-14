@@ -1,8 +1,9 @@
 <VirtualHost *:80>
-  ServerName {{ jellyfin_FQDN }}
+  ServerName {{ jellyfin_FQDN | first }}
+  ServerAlias {{ jellyfin_FQDN | join(' ') }}
 
 {% if jellyfin_redirect_HTTPS %}
-  Redirect permanent / https://{{ jellyfin_FQDN }}
+  Redirect permanent / https://{{ jellyfin_FQDN | first }}
 {% else %}
   ProxyPreserveHost On
 
@@ -17,7 +18,8 @@
 
 <IfModule mod_ssl.c>
   <VirtualHost *:443>
-    ServerName {{ jellyfin_FQDN }}
+    ServerName {{ jellyfin_FQDN | first }}
+    ServerAlias {{ jellyfin_FQDN | join(' ') }}
 
     SSLEngine on
     SSLCertificateFile {{ jellyfin_certificate_path }}/fullchain.pem

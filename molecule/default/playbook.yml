@@ -3,4 +3,8 @@
   hosts: all
   roles:
     - hadrienpatte.jellyfin
+  vars:
+    jellyfin_FQDN:
+      - a.example.com
+      - b.example.com
 ...
