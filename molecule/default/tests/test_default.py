@@ -37,7 +37,7 @@ def test_service_is_enabled(host, name):
 
 @pytest.mark.parametrize('port', [
     ('8096'),
-    ('8920'),
+    # ('8920'),
     ('80'),
     ('443'),
 ])
