@@ -1,4 +1,9 @@
 ---
+- name: Check to see if OS is compatible
+  fail:
+    msg: "The system, {{ ansible_nodename }} ,may not be provisioned, it is incompatible with Jellyfin. The operating system is using, {{ ansible_distribution }} {{ ansible_distribution_major_version }} , it must be Ubuntu 18.04/later or Debian 9/later"
+  when: (ansible_distribution == 'Ubuntu' and ansible_distribution_major_version|int < 18) or ( ansible_distribution == 'Debian' and ansible_distribution_major_version|int < 9 ) or (ansible_distribution != 'Ubuntu' and ansible_distribution != 'Debian')
+
 - name: Install Jellyfin
   include_tasks: install.yml
 
