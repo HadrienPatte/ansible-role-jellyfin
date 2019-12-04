@@ -1,0 +1,27 @@
+---
+- name: Prepare cron for autocert bot
+  apt: name=cron state=present
+
+- name: Stop "{{ jellyfin_HTTP_server }}" to prepare for certbot challenge
+  systemd:
+    name: "{{ jellyfin_HTTP_server }}"
+    state: stopped
+
+- name: Executing certbot component
+  include_role:
+    name: geerlingguy.certbot
+  vars:
+    certbot_admin_email: "{{ jellyfin_admin_email }}"
+    certbot_create_if_missing: true
+    certbot_create_standalone_stop_services: []
+    certbot_auto_renew: true
+    certbot_certs:
+      - domains:
+          - "{{ jellyfin_FQDN }}"
+  when: jellyfin_certificate_via_letsencrypt_certbot
+
+- name: Certbot complete, start "{{ jellyfin_HTTP_server }}"
+  systemd:
+    name: "{{ jellyfin_HTTP_server }}"
+    state: started
+...

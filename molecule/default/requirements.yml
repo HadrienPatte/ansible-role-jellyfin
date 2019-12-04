@@ -1,4 +1,6 @@
 ---
 - src: hadrienpatte.self_signed_certificate
   version: 2.0.1
+- src: geerlingguy.certbot
+  version: 3.0.3
 ...

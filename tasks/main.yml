@@ -11,6 +11,10 @@
     self_signed_certificate_path: "{{ jellyfin_certificate_path }}"
   when: jellyfin_generate_self_signed_certificate
 
+- name: Generate SSL certificate using autocert bot
+  include_tasks: certbot.yml
+  when: jellyfin_certificate_via_letsencrypt_certbot
+
 - name: Configure {{ jellyfin_HTTP_server }}
   include_tasks: HTTP_server.yml
 

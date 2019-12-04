@@ -1,11 +1,12 @@
 ---
 jellyfin_HTTP_port: 8096
 jellyfin_HTTPS_port: 8920
-jellyfin_FQDN:
-  - jellyfin.example.com
+jellyfin_FQDN: www.example.com
 jellyfin_HTTP_server: nginx
-jellyfin_certificate_path: /etc/ssl/private/{{ jellyfin_FQDN | first }}
-jellyfin_generate_self_signed_certificate: true
+jellyfin_certificate_path: /etc/ssl/private/{{ jellyfin_FQDN }}
+jellyfin_generate_self_signed_certificate: false
+jellyfin_certificate_via_letsencrypt_certbot: true
 jellyfin_remove_default: false
-jellyfin_redirect_HTTPS: false
+jellyfin_redirect_HTTPS: true
+jellyfin_admin_email: admin@{{ jellyfin_FQDN }}
 ...

@@ -2,7 +2,7 @@ server {
   listen 80;
   listen [::]:80;
 
-  server_name {{ jellyfin_FQDN | join(' ') }};
+  server_name {{ jellyfin_FQDN }};
 
 {% if jellyfin_redirect_HTTPS %}
   return 301 https://$host$request_uri;
@@ -25,9 +25,14 @@ server {
 }
 server {
   listen 443 ssl http2;
-  server_name {{ jellyfin_FQDN | join(' ') }};
+  server_name {{ jellyfin_FQDN }};
+{% if jellyfin_certificate_via_letsencrypt_certbot %}
+  ssl_certificate /etc/letsencrypt/live/{{ jellyfin_FQDN }}/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/{{ jellyfin_FQDN }}/privkey.pem;
+{% else %}
   ssl_certificate {{ jellyfin_certificate_path }}/fullchain.pem;
   ssl_certificate_key {{ jellyfin_certificate_path }}/privkey.pem;
+{% endif %}
 
   location / {
     proxy_pass http://localhost:{{ jellyfin_HTTP_port }};
