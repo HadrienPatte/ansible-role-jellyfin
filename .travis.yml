@@ -7,7 +7,7 @@ python:
 cache: pip
 
 install:
-  - pip install ansible molecule docker
+  - pip install molecule docker
 
 before_script:
   - cd ..
