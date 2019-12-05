@@ -1,51 +1,77 @@
 server {
-  listen 80;
-  listen [::]:80;
+    listen 80;
+    server_name  {{ jellyfin_FQDN }};
 
-  server_name {{ jellyfin_FQDN }};
+    {% if jellyfin_redirect_HTTPS %}
+    return 301 https://$host$request_uri;
+    {% else %}
+    location / {
+      proxy_pass http://localhost:{{ jellyfin_HTTP_port }};
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_set_header X-Forwarded-for $proxy_add_x_forwarded_for;
+      proxy_set_header Host $host;
+      proxy_set_header X-Forwarded-Proto $remote_addr;
+      proxy_set_header X-Forwarded-Protocol $scheme;
+      proxy_redirect off;
 
-{% if jellyfin_redirect_HTTPS %}
-  return 301 https://$host$request_uri;
-{% else %}
-  location / {
-    proxy_pass http://localhost:{{ jellyfin_HTTP_port }};
-    proxy_set_header X-Real-IP $remote_addr;
-    proxy_set_header X-Forwarded-for $proxy_add_x_forwarded_for;
-    proxy_set_header Host $host;
-    proxy_set_header X-Forwarded-Proto $remote_addr;
-    proxy_set_header X-Forwarded-Protocol $scheme;
-    proxy_redirect off;
-
-    # Send websocket data to the backend aswell
-    proxy_http_version 1.1;
-    proxy_set_header Upgrade $http_upgrade;
-    proxy_set_header Connection "upgrade";
-  }
-{% endif %}
+      # Send websocket data to the backend aswell
+      proxy_http_version 1.1;
+      proxy_set_header Upgrade $http_upgrade;
+      proxy_set_header Connection "upgrade";
+    }
+    {% endif %}
 }
-server {
-  listen 443 ssl http2;
-  server_name {{ jellyfin_FQDN }};
-{% if jellyfin_certificate_via_letsencrypt_certbot %}
-  ssl_certificate /etc/letsencrypt/live/{{ jellyfin_FQDN }}/fullchain.pem;
-  ssl_certificate_key /etc/letsencrypt/live/{{ jellyfin_FQDN }}/privkey.pem;
-{% else %}
-  ssl_certificate {{ jellyfin_certificate_path }}/fullchain.pem;
-  ssl_certificate_key {{ jellyfin_certificate_path }}/privkey.pem;
-{% endif %}
 
-  location / {
-    proxy_pass http://localhost:{{ jellyfin_HTTP_port }};
-    proxy_set_header X-Real-IP $remote_addr;
-    proxy_set_header X-Forwarded-for $proxy_add_x_forwarded_for;
-    proxy_set_header Host $host;
-    proxy_set_header X-Forwarded-Proto $remote_addr;
-    proxy_set_header X-Forwarded-Protocol $scheme;
-    proxy_redirect off;
+ server {
+     listen 443 ssl http2;
+     server_name  {{ jellyfin_FQDN }};
+     {% if jellyfin_certificate_via_letsencrypt_certbot %}
+     ssl_certificate /etc/letsencrypt/live/{{ jellyfin_FQDN }}/fullchain.pem;
+     ssl_certificate_key /etc/letsencrypt/live/{{ jellyfin_FQDN }}/privkey.pem;
+     ssl_trusted_certificate /etc/letsencrypt/live/{{ jellyfin_FQDN }}/chain.pem;
+     {% else %}
+     ssl_certificate {{ jellyfin_certificate_path }}/fullchain.pem;
+     ssl_certificate_key {{ jellyfin_certificate_path }}/privkey.pem;
+     {% endif %}
+     add_header Strict-Transport-Security "max-age=31536000" always;
+     ssl_stapling on;
+     ssl_stapling_verify on;
 
-    # Send websocket data to the backend aswell
-    proxy_http_version 1.1;
-    proxy_set_header Upgrade $http_upgrade;
-    proxy_set_header Connection "upgrade";
-  }
-}
+      # Security / XSS Mitigation Headers
+     add_header X-Frame-Options "SAMEORIGIN";
+     add_header X-XSS-Protection "1; mode=block";
+     add_header X-Content-Type-Options "nosniff";
+
+      # Content Security Policy
+      # See: https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP
+      # Enforces https content and restricts JS/CSS to origin
+      # External Javascript (such as cast_sender.js for Chromecast) must be whitelisted.
+     add_header Content-Security-Policy "default-src https: data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' https://www.gstatic.com/cv/js/sender/v1/cast_sender.js; worker-src 'self' blob:; connect-src 'self'; object-src 'none'; frame-ancestors 'self'";
+
+     location / {
+          # Proxy main Jellyfin traffic
+         proxy_pass http://127.0.0.1:{{ jellyfin_HTTP_port }};
+         proxy_set_header Host $host;
+         proxy_set_header X-Real-IP $remote_addr;
+         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+         proxy_set_header X-Forwarded-Proto $scheme;
+         proxy_set_header X-Forwarded-Protocol $scheme;
+         proxy_set_header X-Forwarded-Host $http_host;
+
+          # Disable buffering when the nginx proxy gets very resource heavy upon streaming
+         proxy_buffering off;
+     }
+     location /socket {
+         # Proxy Jellyfin Websockets traffic
+         proxy_pass http://127.0.0.1:{{ jellyfin_HTTP_port }};
+         proxy_http_version 1.1;
+         proxy_set_header Upgrade $http_upgrade;
+         proxy_set_header Connection "upgrade";
+         proxy_set_header Host $host;
+         proxy_set_header X-Real-IP $remote_addr;
+         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+         proxy_set_header X-Forwarded-Proto $scheme;
+         proxy_set_header X-Forwarded-Protocol $scheme;
+         proxy_set_header X-Forwarded-Host $http_host;
+     }
+ }
