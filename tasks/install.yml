@@ -18,7 +18,14 @@
 - name: Add Jellyfin repository
   apt_repository:
     repo: >
-      deb https://repo.jellyfin.org/{{ ansible_distribution | lower }}
+      deb https://repo.jellyfin.org/{{ ansible_distribution }}
+      {{ ansible_distribution_release }} main
+    state: absent
+
+- name: Add Jellyfin repository
+  apt_repository:
+    repo: >
+      deb https://repo.jellyfin.org/{{ ansible_distribution|lower }}
       {{ ansible_distribution_release }} main
     state: present
 
