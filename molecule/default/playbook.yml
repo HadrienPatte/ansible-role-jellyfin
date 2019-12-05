@@ -4,7 +4,5 @@
   roles:
     - hadrienpatte.jellyfin
   vars:
-    jellyfin_FQDN:
-      - a.example.com
-      - b.example.com
+    jellyfin_FQDN: www.example.com
 ...
