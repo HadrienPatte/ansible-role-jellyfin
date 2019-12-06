@@ -9,15 +9,14 @@ galaxy_info:
   platforms:
     - name: Debian
       versions:
-        - jessie
         - stretch
         - buster
     - name: Ubuntu
       versions:
-        - trusty
-        - xenial
         - bionic
         - cosmic
+        - disco
+        - eoan
   galaxy_tags:
     - jellyfin
     - media
