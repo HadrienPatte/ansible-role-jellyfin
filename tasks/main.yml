@@ -1,15 +1,9 @@
 ---
+- name: Pre-tasks
+  include_tasks: pre_tasks/main.yml
+
 - name: Install Jellyfin
   include_tasks: install.yml
-
-- name: Generate self signed SSL certificate
-  include_role:
-    name: hadrienpatte.self_signed_certificate
-  vars:
-    self_signed_certificate_FQDN: "{{ jellyfin_FQDN }}"
-    self_signed_certificate_key_path: "{{ jellyfin_certificate_path }}"
-    self_signed_certificate_path: "{{ jellyfin_certificate_path }}"
-  when: jellyfin_generate_self_signed_certificate
 
 - name: Generate SSL certificate using autocert bot
   include_tasks: certbot.yml
@@ -20,4 +14,6 @@
 
 - name: Configure Jellyfin
   include_tasks: configure.yml
+  tags:
+    - jellyfinsysconfig
 ...

@@ -1,7 +1,7 @@
 ---
 galaxy_info:
   role_name: jellyfin
-  author: Hadrien Patte
+  author: TiedToAStar
   company: ""
   description: Install Jellyfin on Debian.
   license: MIT
@@ -9,18 +9,19 @@ galaxy_info:
   platforms:
     - name: Debian
       versions:
-        - jessie
         - stretch
         - buster
     - name: Ubuntu
       versions:
-        - trusty
-        - xenial
         - bionic
         - cosmic
+        - disco
+        - eoan
   galaxy_tags:
     - jellyfin
     - media
 
-dependencies: []
+dependencies:
+  - geerlingguy.certbot
+  - tiedtoastar.openldap
 ...

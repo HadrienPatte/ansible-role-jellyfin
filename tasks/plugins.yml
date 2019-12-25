@@ -1,0 +1,103 @@
+---
+- name: Installing Plugins - Determine latest release of Jellyfin ldap plugin
+  uri:
+    url: https://api.github.com/repos/jellyfin/jellyfin-plugin-ldapauth/releases
+    return_content: true
+  register: json_response
+  when: jellyfin_plugins.ldap is defined
+  tags:
+    - jellyfin_plugins
+
+- name: Installing Plugins - Downloading Jellyfin ldap plugin
+  get_url:
+    url: "{{ json_response.json[0].assets[0].browser_download_url }}"
+    dest: /tmp/jellyfin-ldap-latest.zip
+  when: jellyfin_plugins.ldap is defined
+  tags:
+    - jellyfin_plugins
+
+- name: Installing Plugins - Install Jellyfin ldap plugin - make sure unzip is installed
+  apt:
+    name:
+      - unzip
+    state: present
+  register: apt_result
+  retries: 3
+  until: apt_result is succeeded
+
+- name: Installing Plugins - Install Jellyfin ldap plugin - mkdir
+  file:
+    path: /var/lib/jellyfin/plugins/LDAP Authentication/
+    state: directory
+  when: jellyfin_plugins.ldap is defined
+  tags:
+    - jellyfin_plugins
+
+- name: Installing Plugins - Install Jellyfin ldap plugin - mkdir
+  file:
+    path: /var/lib/jellyfin/plugins/configurations/
+    state: directory
+  when: jellyfin_plugins.ldap is defined
+  tags:
+    - jellyfin_plugins
+
+- name: Installing Plugins - Install Jellyfin ldap plugin - unarchive
+  unarchive:
+    src: /tmp/jellyfin-ldap-latest.zip
+    dest: /var/lib/jellyfin/plugins/LDAP Authentication/
+    owner: jellyfin
+    group: jellyfin
+    remote_src: yes
+  when: jellyfin_plugins.ldap is defined
+  tags:
+    - jellyfin_plugins
+
+- name: Installing Plugins - Clean-up Jellyfin ldap plugin
+  file:
+    state: absent
+    path: /tmp/jellyfin-ldap-latest.zip
+  when: jellyfin_plugins.ldap is defined
+  tags:
+    - jellyfin_plugins
+
+- name: Installing Plugins - Install Jellyfin ldap plugin - change folder ownership
+  file:
+    path: /var/lib/jellyfin/plugins/
+    state: directory
+    owner: jellyfin
+    group: jellyfin
+  when: jellyfin_plugins.ldap is defined
+  tags:
+    - jellyfin_plugins
+
+- name: Installing Plugins - Install Jellyfin ldap plugin - change folder ownership
+  file:
+    path: /var/lib/jellyfin/plugins/LDAP Authentication/
+    state: directory
+    owner: jellyfin
+    group: jellyfin
+  when: jellyfin_plugins.ldap is defined
+  tags:
+    - jellyfin_plugins
+
+- name: Installing Plugins - Install Jellyfin ldap plugin - change folder ownership
+  file:
+    path: /var/lib/jellyfin/plugins/configurations/
+    state: directory
+    owner: jellyfin
+    group: jellyfin
+  when: jellyfin_plugins.ldap is defined
+  tags:
+    - jellyfin_plugins
+
+- name: Installing Plugins - Install Jellyfin ldap plugin - Set Config
+  template:
+    src: templates/jellyfin.conf-ldap.j2
+    dest: /var/lib/jellyfin/plugins/configurations/LDAP-Auth.xml
+    owner: jellyfin
+    group: jellyfin
+  when: jellyfin_plugins.ldap is defined
+  tags:
+    - jellyfin_plugins
+
+...

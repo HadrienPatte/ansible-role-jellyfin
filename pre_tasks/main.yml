@@ -1,0 +1,16 @@
+---
+
+- name: Pre-tasks - Install Pip
+  apt:
+    name:
+      - python-pip
+    state: present
+  register: apt_result
+  retries: 3
+  until: apt_result is succeeded
+
+- name: Pre-tasks - Install lxml python module
+  pip:
+    name: lxml
+
+...

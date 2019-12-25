@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<PluginConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <LdapServer>{{ jellyfin_plugins.ldap.ldapserver | default('127.0.0.1') }}</LdapServer>
+  <LdapBaseDn>{{ jellyfin_plugins.ldap.ldapbasedn }}</LdapBaseDn>
+  <LdapPort>{{ jellyfin_plugins.ldap.ldapport | default('389') }}</LdapPort>
+  <LdapSearchAttributes>{{ jellyfin_plugins.ldap.ldapsearchattributes | default('uid') }}</LdapSearchAttributes>
+  <LdapUsernameAttribute>{{ jellyfin_plugins.ldap.ldapusernameattribute | default('uid') }}</LdapUsernameAttribute>
+  <LdapSearchFilter>{{ jellyfin_plugins.ldap.ldapsearchfilter }}</LdapSearchFilter>
+  <LdapAdminFilter>{{ jellyfin_plugins.ldap.ldapadminfilter }}</LdapAdminFilter>
+  <LdapBindUser>{{ jellyfin_plugins.ldap.ldapbinduser }}</LdapBindUser>
+  <LdapBindPassword>{{ jellyfin_plugins.ldap.ldapbindpassword }}</LdapBindPassword>
+  <CreateUsersFromLdap>{{ jellyfin_plugins.ldap.createusersfromldap | default('true') }}</CreateUsersFromLdap>
+  <UseSsl>{{ jellyfin_plugins.ldap.usessl | default('false') }}</UseSsl>
+</PluginConfiguration>

@@ -1,10 +1,23 @@
 ---
-- name: Configure Jellyfin ports
-  lineinfile:
+- name: Configure Jellyfin system config - take down jellyfin
+  systemd:
+    name: jellyfin
+    state: stopped
+
+- name: Configure Jellyfin system config - make readable
+  file:
     path: /etc/jellyfin/system.xml
-    regexp: <{{ item.key }}>\d*<\/{{ item.key }}>
-    line: "  <{{ item.key }}>{{ item.value }}</{{ item.key }}>"
-    state: present
+    state: file
+    owner: root
+    group: root
+  tags:
+    - jellyfinsysconfig
+
+- name: Configure Jellyfin system config
+  xml:
+    path: /etc/jellyfin/system.xml
+    xpath: /ServerConfiguration/{{ item.key }}
+    value: "{{ item.value }}"
   loop:
     - key: PublicPort
       value: "{{ jellyfin_HTTP_port }}"
@@ -14,5 +27,24 @@
       value: "{{ jellyfin_HTTP_port }}"
     - key: HttpsPortNumber
       value: "{{ jellyfin_HTTPS_port }}"
-  notify: Restart Jellyfin
+    - key: EnableRemoteAccess
+      value: 'false'
+    - key: IsStartupWizardCompleted
+      value: "{{ jellyfin_plugins.ldap is defined | lower }}"
+  tags:
+    - jellyfinsysconfig
+
+- name: Configure Jellyfin system config - revert file ownership
+  file:
+    path: /etc/jellyfin/system.xml
+    state: file
+    owner: jellyfin
+    group: jellyfin
+  tags:
+    - jellyfinsysconfig
+
+- name: Configure Jellyfin system config - start jellyfin
+  systemd:
+    name: jellyfin
+    state: started
 ...

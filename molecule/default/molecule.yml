@@ -6,10 +6,22 @@ driver:
 lint:
   name: yamllint
 platforms:
-  - name: instance
+  - name: debian-stretch
     image: minimum2scp/systemd-stretch
     privileged: true
     command: /sbin/init
+
+  - name: debian-buster
+    image: minimum2scp/systemd-buster
+    privileged: true
+    command: /sbin/init
+
+  - name: ubuntu-bionic
+    image: jrei/systemd-ubuntu:18.04
+    privileged: true
+    command: /sbin/init
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
 provisioner:
   name: ansible
   lint:

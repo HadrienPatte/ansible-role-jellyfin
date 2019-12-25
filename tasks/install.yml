@@ -18,13 +18,6 @@
 - name: Add Jellyfin repository
   apt_repository:
     repo: >
-      deb https://repo.jellyfin.org/{{ ansible_distribution }}
-      {{ ansible_distribution_release }} main
-    state: absent
-
-- name: Add Jellyfin repository
-  apt_repository:
-    repo: >
       deb https://repo.jellyfin.org/{{ ansible_distribution|lower }}
       {{ ansible_distribution_release }} main
     state: present
@@ -40,10 +33,14 @@
   retries: 3
   until: apt_result is succeeded
 
+- name: Install jellyfin plugins
+  include_tasks: plugins.yml
+  when: jellyfin_plugins is defined
+
 - name: Enable Jellyfin and {{ jellyfin_HTTP_server }}
   systemd:
     name: "{{ item }}"
-    state: started
+    state: restarted
     enabled: true
   loop:
     - jellyfin
