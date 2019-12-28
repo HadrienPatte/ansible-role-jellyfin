@@ -7,7 +7,7 @@ python:
 cache: pip
 
 install:
-  - pip install molecule docker
+  - pip install -r requirements.txt
 
 before_script:
   - cd ..

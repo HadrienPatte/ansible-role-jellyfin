@@ -10,11 +10,21 @@ platforms:
     image: minimum2scp/systemd-stretch
     privileged: true
     command: /sbin/init
+    published_ports:
+      - "80"
+      - "443"
+      - "8096"
+      - "8920"
 
   - name: debian-buster
     image: minimum2scp/systemd-buster
     privileged: true
     command: /sbin/init
+    published_ports:
+      - "80"
+      - "443"
+      - "8096"
+      - "8920"
 
   - name: ubuntu-bionic
     image: jrei/systemd-ubuntu:18.04
@@ -22,6 +32,12 @@ platforms:
     command: /sbin/init
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    published_ports:
+      - "80"
+      - "443"
+      - "8096"
+      - "8920"
+
 provisioner:
   name: ansible
   lint:

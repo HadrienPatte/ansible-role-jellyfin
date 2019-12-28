@@ -1,0 +1,33 @@
+---
+- name: Install certbot
+  apt:
+    name: certbot
+    state: present
+  register: apt_result
+  retries: 3
+  until: apt_result is succeeded
+
+- name: Create certbot webroot directory
+  file:
+    path: /var/www/certbot
+    state: directory
+
+- name: Restart {{ jellyfin_HTTP_server }} if necessary
+  meta: flush_handlers
+
+- name: Generate Let's Encrypt certificate
+  command: >-
+    certbot certonly
+    --webroot
+    --webroot-path /var/www/certbot
+    {% for FQDN in jellyfin_FQDN %}
+    --domain {{ FQDN }}
+    {% endfor %}
+    --email {{ jellyfin_letsencrypt_email }}
+    --rsa-key-size 4096
+    --agree-tos
+    --non-interactive
+    --post-hook "systemctl restart {{ jellyfin_HTTP_server }}"
+  args:
+    creates: /etc/letsencrypt/live/{{ jellyfin_FQDN | first }}/fullchain.pem
+...
