@@ -14,6 +14,7 @@
     - proxy_connect
     - proxy_html
     - ssl
+    - proxy_wstunnel
   when: jellyfin_HTTP_server == "apache2"
   notify: Restart {{ jellyfin_HTTP_server }}
 

@@ -7,8 +7,8 @@
 {% else %}
   ProxyPreserveHost On
 
-  ProxyPass /embywebsocket ws://localhost:{{ jellyfin_HTTP_port }}/embywebsocket
-  ProxyPassReverse /embywebsocket ws://localhost:{{ jellyfin_HTTP_port }}/embywebsocket
+  ProxyPass /socket ws://localhost:{{ jellyfin_HTTP_port }}/socket
+  ProxyPassReverse /socket ws://localhost:{{ jellyfin_HTTP_port }}/socket
 
   ProxyPass / http://localhost:{{ jellyfin_HTTP_port }}/
   ProxyPassReverse / http://localhost:{{ jellyfin_HTTP_port }}/
@@ -32,8 +32,8 @@
 
     ProxyPreserveHost On
 
-    ProxyPass /embywebsocket ws://localhost:{{ jellyfin_HTTP_port }}/embywebsocket
-    ProxyPassReverse /embywebsocket ws://localhost:{{ jellyfin_HTTP_port }}/embywebsocket
+    ProxyPass /socket ws://localhost:{{ jellyfin_HTTP_port }}/socket
+    ProxyPassReverse /socket ws://localhost:{{ jellyfin_HTTP_port }}/socket
 
     ProxyPass / http://localhost:{{ jellyfin_HTTP_port }}/
     ProxyPassReverse / http://localhost:{{ jellyfin_HTTP_port }}/
