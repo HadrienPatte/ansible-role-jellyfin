@@ -29,6 +29,11 @@
   when: jellyfin_remove_default
   notify: Restart {{ jellyfin_HTTP_server }}
 
+- name: Check if letsencrypt certificate exists
+  stat:
+    path: /etc/letsencrypt/live/{{ jellyfin_FQDN | first }}/fullchain.pem
+  register: letsencrypt_certificate
+
 - name: Copy {{ jellyfin_HTTP_server }} configuration
   template:
     src: jellyfin.conf-{{ jellyfin_HTTP_server }}.j2

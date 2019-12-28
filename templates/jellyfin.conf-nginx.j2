@@ -4,8 +4,16 @@ server {
 
   server_name {{ jellyfin_FQDN | join(' ') }};
 
-{% if jellyfin_redirect_HTTPS %}
-  return 301 https://$host$request_uri;
+{% if jellyfin_letsencrypt %}
+  location /.well-known/acme-challenge/ {
+    default_type "text/plain";
+    root /var/www/certbot;
+  }
+{% endif %}
+{% if jellyfin_generate_self_signed_certificate and jellyfin_redirect_HTTPS or jellyfin_letsencrypt and letsencrypt_certificate.stat.exists %}
+  location / {
+    rewrite ^ https://$server_name$request_uri? permanent;
+  }
 {% else %}
   location / {
     # Proxy main Jellyfin traffic
@@ -35,11 +43,17 @@ server {
   }
 {% endif %}
 }
+{% if jellyfin_generate_self_signed_certificate or jellyfin_letsencrypt and letsencrypt_certificate.stat.exists %}
 server {
   listen 443 ssl http2;
   server_name {{ jellyfin_FQDN | join(' ') }};
+{% if jellyfin_letsencrypt %}
+  ssl_certificate /etc/letsencrypt/live/{{ jellyfin_FQDN | first }}/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/{{ jellyfin_FQDN | first }}/privkey.pem;
+{% else %}
   ssl_certificate {{ jellyfin_certificate_path }}/fullchain.pem;
   ssl_certificate_key {{ jellyfin_certificate_path }}/privkey.pem;
+{% endif %}
   ssl_session_timeout 1d;
   ssl_session_cache shared:SSL:50m;
   ssl_session_tickets off;
@@ -93,3 +107,4 @@ server {
     proxy_set_header X-Forwarded-Host $http_host;
   }
 }
+{% endif %}

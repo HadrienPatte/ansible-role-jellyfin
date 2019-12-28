@@ -14,6 +14,14 @@
 - name: Configure {{ jellyfin_HTTP_server }}
   include_tasks: HTTP_server.yml
 
+- name: Install and configure certbot
+  include_tasks: certbot.yml
+  when: jellyfin_letsencrypt
+
+- name: Reconfigure {{ jellyfin_HTTP_server }}
+  include_tasks: HTTP_server.yml
+  when: jellyfin_letsencrypt
+
 - name: Configure Jellyfin
   include_tasks: configure.yml
 ...
