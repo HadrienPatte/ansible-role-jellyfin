@@ -28,6 +28,7 @@
     name:
       - jellyfin
       - "{{ jellyfin_HTTP_server }}"
+      - python-lxml  # required for Ansible's xml module
     state: present
   register: apt_result
   retries: 3
