@@ -1,10 +1,9 @@
 ---
 - name: Configure Jellyfin ports
-  lineinfile:
+  xml:
     path: /etc/jellyfin/system.xml
-    regexp: <{{ item.key }}>\d*<\/{{ item.key }}>
-    line: "  <{{ item.key }}>{{ item.value }}</{{ item.key }}>"
-    state: present
+    xpath: /ServerConfiguration/{{ item.key }}
+    value: "{{ item.value }}"
   loop:
     - key: PublicPort
       value: "{{ jellyfin_HTTP_port }}"

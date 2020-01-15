@@ -11,6 +11,7 @@ testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
 @pytest.mark.parametrize('name', [
     ('jellyfin'),
     ('nginx'),
+    ('python-lxml'),
 ])
 def test_package_is_installed(host, name):
     package = host.package(name)
