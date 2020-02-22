@@ -13,7 +13,7 @@ testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
     ('gnupg2'),
     ('jellyfin'),
     ('nginx'),
-    ('python-lxml'),
+    ('python3-lxml'),
 ])
 def test_package_is_installed(host, name):
     package = host.package(name)
