@@ -1,7 +1,9 @@
 ---
-- name: Install apt-transport-https
+- name: Install apt-transport-https and gpg
   apt:
-    name: apt-transport-https
+    name:
+      - apt-transport-https
+      - gnupg2  # required for Ansible's apt_key module
     state: present
   register: apt_result
   retries: 3

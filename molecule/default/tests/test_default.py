@@ -9,6 +9,8 @@ testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
 
 
 @pytest.mark.parametrize('name', [
+    ('apt-transport-https'),
+    ('gnupg2'),
     ('jellyfin'),
     ('nginx'),
     ('python-lxml'),
