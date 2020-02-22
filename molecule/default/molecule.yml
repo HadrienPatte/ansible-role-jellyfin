@@ -1,7 +1,7 @@
 ---
 platforms:
   - name: debian-stretch
-    image: jrei/systemd-debian:9
+    image: minimum2scp/systemd-stretch
     privileged: true
     command: /sbin/init
     published_ports:
@@ -11,7 +11,7 @@ platforms:
       - "8920"
 
   - name: debian-buster
-    image: jrei/systemd-debian:10
+    image: minimum2scp/systemd-buster
     privileged: true
     command: /sbin/init
     published_ports:
