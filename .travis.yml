@@ -1,21 +1,47 @@
 ---
-services: docker
-
+dist: bionic
 language: python
-python:
-  - 3.6
+python: 3.8
 cache: pip
 
-install:
-  - pip install -r requirements.txt
+stages:
+  - lint
+  - test
 
-before_script:
-  - cd ..
-  - mv ansible-role-jellyfin hadrienpatte.jellyfin
-  - cd hadrienpatte.jellyfin
+jobs:
+  include:
+    - name: yamllint
+      stage: lint
+      install:
+        - pip install yamllint
+      script:
+        - yamllint .
 
-script:
-  - molecule test
+    - name: ansible-lint
+      stage: lint
+      install:
+        - pip install ansible-lint
+      script:
+        - ansible-lint -v
+
+    - name: flake8
+      stage: lint
+      install:
+        - pip install flake8
+      script:
+        - flake8
+
+    - name: molecule
+      stage: test
+      services: docker
+      install:
+        - pip install molecule[docker] pytest testinfra
+      before_script:
+        - cd ..
+        - mv ansible-role-jellyfin hadrienpatte.jellyfin
+        - cd hadrienpatte.jellyfin
+      script:
+        - molecule test
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/

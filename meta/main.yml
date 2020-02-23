@@ -15,7 +15,7 @@ galaxy_info:
       versions:
         - bionic
         - cosmic
-        - disco dingo
+        - disco
   galaxy_tags:
     - jellyfin
     - media
