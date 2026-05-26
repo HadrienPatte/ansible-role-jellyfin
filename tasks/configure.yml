@@ -14,4 +14,14 @@
     - key: HttpsPortNumber
       value: "{{ jellyfin_HTTPS_port | string }}"
   notify: Restart Jellyfin
+- name: Configure Jellyfin networking
+  ansible.builtin.xml:
+    path: /etc/jellyfin/network.xml
+    xpath: /NetworkConfiguration/{{ item.key }}/string
+    value: "{{ item.value }}"
+  loop:
+    - key: LocalNetworkAddresses
+      value: "{{ jellyfin_bind_ip }}"
+  when: jellyfin_bind_ip is defined
+  notify: Restart Jellyfin
 ...

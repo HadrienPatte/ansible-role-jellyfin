@@ -10,4 +10,5 @@ jellyfin_redirect_HTTPS: false
 jellyfin_letsencrypt: false
 jellyfin_letsencrypt_email: admin@{{ jellyfin_FQDN | first }}
 jellyfin_remove_default: false
+jellyfin_bind_ip: ""
 ...
